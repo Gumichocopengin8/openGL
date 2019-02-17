@@ -10,6 +10,7 @@
 		23425EB021F79D68003DCFA0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23425EAF21F79D68003DCFA0 /* main.cpp */; };
 		23425EB921F79D99003DCFA0 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23425EB721F79D99003DCFA0 /* GLUT.framework */; };
 		23425EBA21F79D99003DCFA0 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23425EB821F79D99003DCFA0 /* OpenGL.framework */; };
+		23BEF4132218B98F0057F73B /* clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23BEF4122218B98F0057F73B /* clock.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,6 +30,7 @@
 		23425EAF21F79D68003DCFA0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		23425EB721F79D99003DCFA0 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		23425EB821F79D99003DCFA0 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		23BEF4122218B98F0057F73B /* clock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = clock.cpp; sourceTree = "<group>"; };
 		23E4A5BD220A085E00E252D6 /* Angel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Angel.h; sourceTree = "<group>"; };
 		23E4A5BE220A08A600E252D6 /* mat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mat.h; sourceTree = "<group>"; };
 		23E4A5BF220A08A600E252D6 /* vec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vec.h; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 				23E4A5BF220A08A600E252D6 /* vec.h */,
 				23E4A5BD220A085E00E252D6 /* Angel.h */,
 				23425EAF21F79D68003DCFA0 /* main.cpp */,
+				23BEF4122218B98F0057F73B /* clock.cpp */,
 			);
 			path = openGL;
 			sourceTree = "<group>";
@@ -142,6 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23BEF4132218B98F0057F73B /* clock.cpp in Sources */,
 				23425EB021F79D68003DCFA0 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
