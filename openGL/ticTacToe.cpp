@@ -7,10 +7,13 @@
 //
 
 #include "Angel.h"
+using namespace std;
+
 #define LEN 512
 
-char board[3][3] = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
 bool firstPlayer = true; // first player or not
+bool boardAvail[3][3] = {{false, false, false}, {false, false, false}, {false, false, false}};
+char board[3][3] = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
 
 void init(void) {
   glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -59,8 +62,45 @@ void circle(GLfloat cx, GLfloat cy) {
   glFlush();
 }
 
-void drawSign(GLfloat cx, GLfloat cy) {
-  firstPlayer ? cross(cx, cy) : circle(cx, cy);
+void drawSign() {
+  if(boardAvail[0][0]) {
+    if(board[0][0] == 'o') circle(-0.6, 0.6);
+    else cross(-0.6, 0.6);
+  }
+  if(boardAvail[0][1]) {
+    if(board[0][1] == 'o') circle(0, 0.6);
+    else cross(0, 0.6);
+  }
+  if(boardAvail[0][2]) {
+    if(board[0][2] == 'o') circle(0.6, 0.6);
+    else cross(0.6, 0.6);
+  }
+
+  if(boardAvail[1][0]) {
+    if(board[1][0] == 'o') circle(-0.6, 0);
+    else cross(-0.6, 0);
+  }
+  if(boardAvail[1][1]) {
+    if(board[1][1] == 'o') circle(0, 0);
+    else cross(0, 0.6);
+  }
+  if(boardAvail[1][2]) {
+    if(board[1][2] == 'o') circle(0.6, 0);
+    else cross(0.6, 0.6);
+  }
+
+  if(boardAvail[2][0]) {
+    if(board[2][0] == 'o') circle(-0.6, -0.6);
+    else cross(-0.6, -0.6);
+  }
+  if(boardAvail[2][1]) {
+    if(board[2][1] == 'o') circle(0, -0.6);
+    else cross(0, -0.6);
+  }
+  if(boardAvail[2][2]) {
+    if(board[2][2] == 'o') circle(0.6, -0.6);
+    else cross(0.6, -0.6);
+  }
 }
 
 void display(void) {
@@ -68,42 +108,43 @@ void display(void) {
   glViewport(0 , 0, LEN , LEN); // view port
 
   frame();
+  drawSign();
 
   glFlush();
 }
 
 void clickBoard(GLdouble x, GLdouble y, char turn) {
   if(0.9 > y && y > 0.3) { // first row
-    if(-0.9 > x && x > -0.3) {
-      drawSign(-0.75, 0.75);
+    if(-0.3 > x && x > -0.9) {
+      boardAvail[0][0] = true;
       board[0][0] = turn;
     } else if(0.3 > x && x > -0.3) {
-      drawSign(0, -0.75);
+      boardAvail[0][1] = true;
       board[0][1] = turn;
     } else if(0.9 > x && x > 0.3) {
-      drawSign(0.75, 0.75);
+      boardAvail[0][2] = true;
       board[0][2] = turn;
     }
   } else if(0.3 > y && y > -0.3) { // second row
-    if(-0.9 > x && x > -0.3) {
-      drawSign(0, -0.75);
+    if(-0.3 > x && x > -0.9) {
+      boardAvail[1][0] = true;
       board[1][0] = turn;
     } else if(0.3 > x && x > -0.3) {
-      drawSign(0, 0);
+      boardAvail[1][1] = true;
       board[1][1] = turn;
     } else if(0.9 > x && x > 0.3) {
-      drawSign(0, 0.75);
+      boardAvail[1][2] = true;
       board[1][2] = turn;
     }
-  } else if(-0.3 > y && y > -0.9) {
-    if(-0.9 > x && x > -0.3) {
-      drawSign(-0.75, -0.75);
+  } else if(-0.3 > y && y > -0.9) { // third row
+    if(-0.3 > x && x > -0.9) {
+      boardAvail[2][0] = true;
       board[2][0] = turn;
     } else if(0.3 > x && x > -0.3) {
-      drawSign(0, -0.75);
+      boardAvail[2][1] = true;
       board[2][1] = turn;
     } else if(0.9 > x && x > 0.3) {
-      drawSign(0.75, -0.75);
+      boardAvail[2][2] == true;
       board[2][2] = turn;
     }
   }
@@ -111,8 +152,8 @@ void clickBoard(GLdouble x, GLdouble y, char turn) {
 
 void mouse(int button, int state, int x, int y) {
   bool isLeft =false;
-  double xPos = (double(x)/(glutGet(GLUT_WINDOW_WIDTH)/2) - 1);
-  double yPos = (double(y)/(glutGet(GLUT_WINDOW_HEIGHT)/2) - 1) * -1;
+  double xPos = (double(x)/(glutGet(GLUT_WINDOW_WIDTH)/2) - 1); // conversion world pos to ndc
+  double yPos = (double(y)/(glutGet(GLUT_WINDOW_HEIGHT)/2) - 1) * -1; // conversion world pos to ndc
 
   switch(button) {
     case GLUT_LEFT_BUTTON:
@@ -127,19 +168,16 @@ void mouse(int button, int state, int x, int y) {
     case GLUT_DOWN:
       if(isLeft){
         if(firstPlayer) {
+          clickBoard(xPos, yPos, 'x'); 
           firstPlayer = false;
-          clickBoard(xPos, yPos, 'x');
         } else {
+          clickBoard(xPos, yPos, 'o'); 
           firstPlayer = true;
-          clickBoard(xPos, yPos, 'o');
         }
       }
       isLeft = false;
       break;
-    default:
-      break;
   }
-  printf("%f:%f\n", xPos, yPos);
 }
 
 void timer(int extra) {
