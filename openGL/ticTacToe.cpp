@@ -7,11 +7,11 @@
 //
 
 #include "Angel.h"
-using namespace std;
-
 #define LEN 512
 
 bool firstPlayer = true; // first player or not
+bool xWin = false;
+bool oWin = false;
 bool boardAvail[3][3] = {{false, false, false}, {false, false, false}, {false, false, false}};
 char board[3][3] = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
 
@@ -22,7 +22,7 @@ void init(void) {
 void frame() {
   for(GLfloat i = 0.3; i < 1; i += 0.6) { 
     glBegin(GL_LINES); 
-      glColor3d(1.0, 0.0, 0.0);
+      glColor3d(0.0, 0.0, 0.0);
       glVertex2d(-0.9, i); // row line
       glVertex2d(0.9, i);
       glVertex2d(-0.9, i * -1);
@@ -63,91 +63,97 @@ void circle(GLfloat cx, GLfloat cy) {
 }
 
 void drawSign() {
-  if(boardAvail[0][0]) {
-    if(board[0][0] == 'o') circle(-0.6, 0.6);
-    else cross(-0.6, 0.6);
-  }
-  if(boardAvail[0][1]) {
-    if(board[0][1] == 'o') circle(0, 0.6);
-    else cross(0, 0.6);
-  }
-  if(boardAvail[0][2]) {
-    if(board[0][2] == 'o') circle(0.6, 0.6);
-    else cross(0.6, 0.6);
-  }
-
-  if(boardAvail[1][0]) {
-    if(board[1][0] == 'o') circle(-0.6, 0);
-    else cross(-0.6, 0);
-  }
-  if(boardAvail[1][1]) {
-    if(board[1][1] == 'o') circle(0, 0);
-    else cross(0, 0.6);
-  }
-  if(boardAvail[1][2]) {
-    if(board[1][2] == 'o') circle(0.6, 0);
-    else cross(0.6, 0.6);
-  }
-
-  if(boardAvail[2][0]) {
-    if(board[2][0] == 'o') circle(-0.6, -0.6);
-    else cross(-0.6, -0.6);
-  }
-  if(boardAvail[2][1]) {
-    if(board[2][1] == 'o') circle(0, -0.6);
-    else cross(0, -0.6);
-  }
-  if(boardAvail[2][2]) {
-    if(board[2][2] == 'o') circle(0.6, -0.6);
-    else cross(0.6, -0.6);
-  }
+  double pos = 0;
+  for(int i = 0; i < 3; i++) {
+    pos = -0.6;
+    for(int j = 0; j < 3; j++) {
+      if(boardAvail[i][j]) {
+        if(i == 0){
+          if(board[0][j] == 'o') circle(pos, 0.6);
+          else cross(pos, 0.6);
+          pos += 0.6;
+        } else if(i == 1){
+          if(board[1][j] == 'o') circle(pos, 0);
+          else cross(pos, 0);
+          pos += 0.6;
+        } else if(i == 2){
+          if(board[2][j] == 'o') circle(pos, -0.6);
+          else cross(pos, -0.6);
+          pos += 0.6;
+        }
+      }
+    }
+  } 
 }
 
 void display(void) {
   glClear(GL_COLOR_BUFFER_BIT); // clear the window
   glViewport(0 , 0, LEN , LEN); // view port
 
+  if(xWin) glClearColor(0.0, 1.0, 0.0, 1.0);
+  else if(oWin ) glClearColor(1.0, 0.0, 0.0, 1.0);
   frame();
   drawSign();
 
   glFlush();
 }
 
-void clickBoard(GLdouble x, GLdouble y, char turn) {
+bool clickBoard(GLdouble x, GLdouble y, char turn) {
+  int num = 0;
   if(0.9 > y && y > 0.3) { // first row
     if(-0.3 > x && x > -0.9) {
-      boardAvail[0][0] = true;
-      board[0][0] = turn;
+      num = 0;
     } else if(0.3 > x && x > -0.3) {
-      boardAvail[0][1] = true;
-      board[0][1] = turn;
+      num = 1;
     } else if(0.9 > x && x > 0.3) {
-      boardAvail[0][2] = true;
-      board[0][2] = turn;
+      num = 2;
     }
+    if(boardAvail[0][num] == true) return false;
+    boardAvail[0][num] = true;
+    board[0][num] = turn;
   } else if(0.3 > y && y > -0.3) { // second row
     if(-0.3 > x && x > -0.9) {
-      boardAvail[1][0] = true;
-      board[1][0] = turn;
+      num = 0;
     } else if(0.3 > x && x > -0.3) {
-      boardAvail[1][1] = true;
-      board[1][1] = turn;
+      num = 1;
     } else if(0.9 > x && x > 0.3) {
-      boardAvail[1][2] = true;
-      board[1][2] = turn;
+      num = 2;
     }
+    if(boardAvail[1][num] == true) return false;
+    boardAvail[1][num] = true;
+    board[1][num] = turn;
   } else if(-0.3 > y && y > -0.9) { // third row
     if(-0.3 > x && x > -0.9) {
-      boardAvail[2][0] = true;
-      board[2][0] = turn;
+      num = 0;
     } else if(0.3 > x && x > -0.3) {
-      boardAvail[2][1] = true;
-      board[2][1] = turn;
+      num = 1;
     } else if(0.9 > x && x > 0.3) {
-      boardAvail[2][2] == true;
-      board[2][2] = turn;
+      num = 2;
     }
+    if(boardAvail[2][num] == true) return false;
+    boardAvail[2][num] = true;
+    board[2][num] = turn;
   }
+  return true;
+}
+
+bool checkBoard(char target) {
+  int n = 0;
+  for(int i = 0; i < 3; i++) {
+    for(int j = 0; j < 3; j++) {
+      if(boardAvail[i][j] == true) n++;
+    }
+    if(n == 9) exit(0);
+  }
+  if(board[0][0] == target && board[0][1] == target && board[0][0] == target) return true;
+  else if(board[1][0] == target && board[1][1] == target && board[1][0] == target) return true;
+  else if(board[2][0] == target && board[2][1] == target && board[2][0] == target) return true;
+  else if(board[0][0] == target && board[1][0] == target && board[2][0] == target) return true;
+  else if(board[0][1] == target && board[1][1] == target && board[2][1] == target) return true;
+  else if(board[0][2] == target && board[1][2] == target && board[2][2] == target) return true;
+  else if(board[0][0] == target && board[1][1] == target && board[2][2] == target) return true;
+  else if(board[0][2] == target && board[1][1] == target && board[2][0] == target) return true;
+  return false;
 }
 
 void mouse(int button, int state, int x, int y) {
@@ -157,6 +163,7 @@ void mouse(int button, int state, int x, int y) {
 
   switch(button) {
     case GLUT_LEFT_BUTTON:
+      if(xWin || oWin) exit(0);
       isLeft = true;
       break;
     case GLUT_RIGHT_BUTTON:
@@ -167,11 +174,11 @@ void mouse(int button, int state, int x, int y) {
   switch(state) {
     case GLUT_DOWN:
       if(isLeft){
-        if(firstPlayer) {
-          clickBoard(xPos, yPos, 'x'); 
+        if(firstPlayer && clickBoard(xPos, yPos, 'x')) {
+          xWin = checkBoard('x');
           firstPlayer = false;
-        } else {
-          clickBoard(xPos, yPos, 'o'); 
+        } else if(!firstPlayer && clickBoard(xPos, yPos, 'o')) {
+          oWin = checkBoard('o');
           firstPlayer = true;
         }
       }
