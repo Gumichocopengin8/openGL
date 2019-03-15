@@ -12,6 +12,7 @@
 bool firstPlayer = true; // first player or not
 bool xWin = false;
 bool oWin = false;
+bool tie = false;
 bool boardAvail[3][3] = {{false, false, false}, {false, false, false}, {false, false, false}};
 char board[3][3] = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
 
@@ -68,20 +69,15 @@ void drawSign() {
     pos = -0.6;
     for(int j = 0; j < 3; j++) {
       if(boardAvail[i][j]) {
-        if(i == 0){
-          if(board[0][j] == 'o') circle(pos, 0.6);
-          else cross(pos, 0.6);
-          pos += 0.6;
+        if(i == 0) {
+          (board[0][j] == 'o') ? circle(pos, 0.6) : cross(pos, 0.6);
         } else if(i == 1){
-          if(board[1][j] == 'o') circle(pos, 0);
-          else cross(pos, 0);
-          pos += 0.6;
+          (board[1][j] == 'o') ? circle(pos, 0) : cross(pos, 0);
         } else if(i == 2){
-          if(board[2][j] == 'o') circle(pos, -0.6);
-          else cross(pos, -0.6);
-          pos += 0.6;
+          (board[2][j] == 'o') ? circle(pos, -0.6) : cross(pos, -0.6);
         }
       }
+      pos += 0.6;
     }
   } 
 }
@@ -91,7 +87,7 @@ void display(void) {
   glViewport(0 , 0, LEN , LEN); // view port
 
   if(xWin) glClearColor(0.0, 1.0, 0.0, 1.0);
-  else if(oWin ) glClearColor(1.0, 0.0, 0.0, 1.0);
+  else if(oWin) glClearColor(1.0, 0.0, 0.0, 1.0);
   frame();
   drawSign();
 
@@ -138,21 +134,21 @@ bool clickBoard(GLdouble x, GLdouble y, char turn) {
 }
 
 bool checkBoard(char target) {
-  int n = 0;
-  for(int i = 0; i < 3; i++) {
-    for(int j = 0; j < 3; j++) {
-      if(boardAvail[i][j] == true) n++;
-    }
-    if(n == 9) exit(0);
-  }
-  if(board[0][0] == target && board[0][1] == target && board[0][0] == target) return true;
-  else if(board[1][0] == target && board[1][1] == target && board[1][0] == target) return true;
-  else if(board[2][0] == target && board[2][1] == target && board[2][0] == target) return true;
+  if(board[0][0] == target && board[0][1] == target && board[0][2] == target) return true;
+  else if(board[1][0] == target && board[1][1] == target && board[1][2] == target) return true;
+  else if(board[2][0] == target && board[2][1] == target && board[2][2] == target) return true;
   else if(board[0][0] == target && board[1][0] == target && board[2][0] == target) return true;
   else if(board[0][1] == target && board[1][1] == target && board[2][1] == target) return true;
   else if(board[0][2] == target && board[1][2] == target && board[2][2] == target) return true;
   else if(board[0][0] == target && board[1][1] == target && board[2][2] == target) return true;
   else if(board[0][2] == target && board[1][1] == target && board[2][0] == target) return true;
+
+  int n = 0;
+  for(int i = 0; i < 3; i++) {
+    for(int j = 0; j < 3; j++)
+      if(boardAvail[i][j] == true) n++;
+    if(n == 9) tie = true;
+  }
   return false;
 }
 
@@ -163,7 +159,6 @@ void mouse(int button, int state, int x, int y) {
 
   switch(button) {
     case GLUT_LEFT_BUTTON:
-      if(xWin || oWin) exit(0);
       isLeft = true;
       break;
     case GLUT_RIGHT_BUTTON:
@@ -174,6 +169,7 @@ void mouse(int button, int state, int x, int y) {
   switch(state) {
     case GLUT_DOWN:
       if(isLeft){
+        if(xWin || oWin || tie) exit(0);
         if(firstPlayer && clickBoard(xPos, yPos, 'x')) {
           xWin = checkBoard('x');
           firstPlayer = false;
