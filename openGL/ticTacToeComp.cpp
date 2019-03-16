@@ -6,6 +6,9 @@
 //  Copyright © 2019 Keita Nonaka. All rights reserved.
 //
 
+// minmax algorithm reference
+// https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-3-tic-tac-toe-ai-finding-optimal-move/
+
 #include "Angel.h"
 #include <iostream>
 using namespace std;
@@ -95,7 +98,6 @@ void display(void) {
   else if(oWin) glClearColor(1.0, 0.0, 0.0, 1.0);
   frame();
   drawSign();
-  
   glFlush();
 }
 
@@ -157,102 +159,98 @@ bool checkBoard(char target) {
   return false;
 }
 
-
-bool isMovesLeft(char board[3][3]) { 
-  for (int i = 0; i<3; i++) 
-    for (int j = 0; j<3; j++) 
-      if (board[i][j]==' ') return true; 
-  return false; 
+bool isMovesLeft(char board[3][3]) {
+  for (int i = 0; i<3; i++)
+    for (int j = 0; j<3; j++)
+      if (board[i][j]==' ') return true;
+  return false;
 }
 
+int evaluate(char b[3][3]) {
+  for (int row = 0; row<3; row++) {
+    if (b[row][0]==b[row][1] && b[row][1]==b[row][2]) {
+      if (b[row][0]==player) return +10;
+      else if (b[row][0]==opponent) return -10;
+    }
+  }
 
-int evaluate(char b[3][3]) { 
-  for (int row = 0; row<3; row++) { 
-    if (b[row][0]==b[row][1] && b[row][1]==b[row][2]) { 
-      if (b[row][0]==player) return +10; 
-      else if (b[row][0]==opponent) return -10; 
-    } 
-  } 
+  for (int col = 0; col<3; col++) {
+    if (b[0][col]==b[1][col] && b[1][col]==b[2][col]) {
+      if (b[0][col]==player) return +10;
+      else if (b[0][col]==opponent) return -10;
+    }
+  }
 
-  for (int col = 0; col<3; col++) { 
-    if (b[0][col]==b[1][col] && b[1][col]==b[2][col]) { 
-      if (b[0][col]==player) return +10; 
-      else if (b[0][col]==opponent) return -10; 
-    } 
-  } 
+  if (b[0][0]==b[1][1] && b[1][1]==b[2][2]) {
+    if (b[0][0]==player) return +10;
+    else if (b[0][0]==opponent) return -10;
+  }
 
-  if (b[0][0]==b[1][1] && b[1][1]==b[2][2]) { 
-    if (b[0][0]==player) return +10; 
-    else if (b[0][0]==opponent) return -10; 
-  } 
-
-  if (b[0][2]==b[1][1] && b[1][1]==b[2][0]) { 
-    if (b[0][2]==player) return + 10; 
-    else if (b[0][2]==opponent) return - 10; 
-  } 
-  return 0; 
+  if (b[0][2]==b[1][1] && b[1][1]==b[2][0]) {
+    if (b[0][2]==player) return + 10;
+    else if (b[0][2]==opponent) return - 10;
+  }
+  return 0;
 }
 
-int minimax(char board[3][3], int depth, bool isMax) { 
-  int score = evaluate(board); 
+int minimax(char board[3][3], int depth, bool isMax) {
+  int score = evaluate(board);
 
-  if (score == 10) return score; 
-  if (score == -10) return score; 
-  if (isMovesLeft(board)==false) return 0; 
+  if (score == 10) return score;
+  if (score == -10) return score;
+  if (isMovesLeft(board)==false) return 0;
 
-  if (isMax) { 
-      int best = -1000; 
-      for (int i = 0; i<3; i++) { 
-        for (int j = 0; j<3; j++) { 
-          if (board[i][j]==' ') { 
-            board[i][j] = player; 
-            best = max( best, minimax(board, depth+1, !isMax) ); 
-            board[i][j] = ' '; 
-          } 
-        } 
-      } 
-      return best; 
-  } else { 
-    int best = 1000; 
-    for(int i = 0; i<3; i++) { 
-      for (int j = 0; j<3; j++) { 
-        if (board[i][j]==' ') { 
-          board[i][j] = opponent; 
-          best = min(best, minimax(board, depth+1, !isMax)); 
-          board[i][j] = ' '; 
-        } 
-      } 
-    } 
-    return best; 
+  if (isMax) {
+    int best = -1000;
+    for (int i = 0; i<3; i++) {
+      for (int j = 0; j<3; j++) {
+        if (board[i][j]==' ') {
+          board[i][j] = player;
+          best = max(best, minimax(board, depth+1, !isMax));
+          board[i][j] = ' ';
+        }
+      }
+    }
+    return best;
+  } else {
+    int best = 1000;
+    for(int i = 0; i<3; i++) {
+      for (int j = 0; j<3; j++) {
+        if (board[i][j]==' ') {
+          board[i][j] = opponent;
+          best = min(best, minimax(board, depth+1, !isMax));
+          board[i][j] = ' ';
+        }
+      }
+    }
+    return best;
   }
 }
 
-void findBestMove(char board[3][3]) { 
-  int bestVal = -1000; 
-  int row = -1; 
+void findBestMove(char board[3][3]) {
+  int bestVal = -1000;
+  int row = -1;
   int col = -1;
 
   if(draw) return;
-  for (int i = 0; i < 3; i++) { 
-    for (int j = 0; j < 3; j++) { 
-      if (board[i][j]==' ') { 
-        board[i][j] = player;  
-        int moveVal = minimax(board, 0, false);  
-        board[i][j] = ' '; 
-        if (moveVal > bestVal) { 
-          row = i; 
-          col = j; 
-          bestVal = moveVal; 
-        } 
-      } 
-    } 
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      if (board[i][j]==' ') {
+        board[i][j] = player; 
+        int moveVal = minimax(board, 0, false);
+        board[i][j] = ' ';
+        if (moveVal > bestVal) {
+          row = i;
+          col = j;
+          bestVal = moveVal;
+        }
+      }
+    }
   }
   board[row][col] = opponent;
   boardAvail[row][col] = true;
   oWin = checkBoard(opponent);
-  // firstPlayer = true;
-  printf("The value of the best Move is : %d: %d: %d\n\n", row, col, bestVal); 
-} 
+}
 
 void mouse(int button, int state, int x, int y) {
   bool isLeft =false;
@@ -275,7 +273,7 @@ void mouse(int button, int state, int x, int y) {
         if(firstPlayer && clickBoard(xPos, yPos, player)) {
           xWin = checkBoard(player);
           firstPlayer = false;
-          if(!firstPlayer) {
+          if(!firstPlayer && !xWin && !oWin && !draw) {
             findBestMove(board);
             oWin = checkBoard(opponent);
             firstPlayer = true;
