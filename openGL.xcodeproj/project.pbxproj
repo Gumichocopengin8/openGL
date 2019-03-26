@@ -7,9 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2333BFEA2238CC6600F2E5DB /* ticTacToe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2333BFE92238CC6600F2E5DB /* ticTacToe.cpp */; };
 		23425EB021F79D68003DCFA0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23425EAF21F79D68003DCFA0 /* main.cpp */; };
 		23425EB921F79D99003DCFA0 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23425EB721F79D99003DCFA0 /* GLUT.framework */; };
 		23425EBA21F79D99003DCFA0 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23425EB821F79D99003DCFA0 /* OpenGL.framework */; };
+		238612F1221C809D009EC734 /* clockRealTime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 238612F0221C809D009EC734 /* clockRealTime.cpp */; };
+		23B5743A2248C88100410E39 /* morphing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B574392248C88100410E39 /* morphing.cpp */; };
+		23B583DF223BA1AB00240650 /* ticTacToeComp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B583DE223BA1AB00240650 /* ticTacToeComp.cpp */; };
 		23BEF4132218B98F0057F73B /* clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23BEF4122218B98F0057F73B /* clock.cpp */; };
 /* End PBXBuildFile section */
 
@@ -26,10 +30,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2333BFE92238CC6600F2E5DB /* ticTacToe.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ticTacToe.cpp; sourceTree = "<group>"; };
 		23425EAC21F79D68003DCFA0 /* openGL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = openGL; sourceTree = BUILT_PRODUCTS_DIR; };
 		23425EAF21F79D68003DCFA0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		23425EB721F79D99003DCFA0 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		23425EB821F79D99003DCFA0 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		238612F0221C809D009EC734 /* clockRealTime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = clockRealTime.cpp; sourceTree = "<group>"; };
+		23B574392248C88100410E39 /* morphing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = morphing.cpp; sourceTree = "<group>"; };
+		23B583DE223BA1AB00240650 /* ticTacToeComp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ticTacToeComp.cpp; sourceTree = "<group>"; };
 		23BEF4122218B98F0057F73B /* clock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = clock.cpp; sourceTree = "<group>"; };
 		23E4A5BD220A085E00E252D6 /* Angel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Angel.h; sourceTree = "<group>"; };
 		23E4A5BE220A08A600E252D6 /* mat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mat.h; sourceTree = "<group>"; };
@@ -76,6 +84,10 @@
 				23E4A5BD220A085E00E252D6 /* Angel.h */,
 				23425EAF21F79D68003DCFA0 /* main.cpp */,
 				23BEF4122218B98F0057F73B /* clock.cpp */,
+				238612F0221C809D009EC734 /* clockRealTime.cpp */,
+				23B574392248C88100410E39 /* morphing.cpp */,
+				2333BFE92238CC6600F2E5DB /* ticTacToe.cpp */,
+				23B583DE223BA1AB00240650 /* ticTacToeComp.cpp */,
 			);
 			path = openGL;
 			sourceTree = "<group>";
@@ -146,7 +158,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				23BEF4132218B98F0057F73B /* clock.cpp in Sources */,
+				238612F1221C809D009EC734 /* clockRealTime.cpp in Sources */,
+				23B583DF223BA1AB00240650 /* ticTacToeComp.cpp in Sources */,
+				2333BFEA2238CC6600F2E5DB /* ticTacToe.cpp in Sources */,
 				23425EB021F79D68003DCFA0 /* main.cpp in Sources */,
+				23B5743A2248C88100410E39 /* morphing.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
