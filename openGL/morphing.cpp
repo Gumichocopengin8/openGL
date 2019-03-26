@@ -10,11 +10,10 @@
 #define LEN 512
 
 double x = 0;
-double y = 0;
-double dt = 0.001;
+double dt = 0.0001;
 double mv = 0;
-GLdouble PI = 4.0*atan(1.0);
-GLdouble theta = 10.0*PI/360.0;
+GLdouble PI = 4.0 * atan(1.0);
+GLdouble theta = 10.0 * PI / 360.0;
 
 void init(void) {
   glClearColor(0.0, 0.0, 1.0, 1.0);
@@ -25,9 +24,7 @@ void idle(void) {
 }
 
 void deltaTime(){
-  if(mv < 0 || mv > 1) {
-    dt = -dt;
-  }
+  if(mv < 0 || mv > 1) dt = -dt;
   mv += dt;
   glutPostRedisplay();
 }
@@ -47,20 +44,20 @@ void display(void) {
   glLoadIdentity();
   gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
   glViewport(0 , 0, LEN , LEN); // view port
-  
-  glRotated(x, 0.0, 1.0, 0.0);
-  x++;
+
+  glRotated(x++, 1.0, 1.0, 0.0);
   glBegin(GL_LINE_LOOP); // shuriken 
     glColor3d(0.0, 1.0, 0.0);
 
-    glVertex2d(0, 0.8 - 0.6 * mv);
-    glVertex2d(-0.2 + 0.6 * mv, 0.4 - 0.2 * mv);
-    glVertex2d(0.4 + 0.6 * mv, 0.4 * mv);
-    glVertex2d(-0.2 + 0.4 * mv, -0.2 + 0.8 * mv);
-    glVertex2d(0.4 * mv, -0.6 + 0.8 * mv);
-    glVertex2d(0.4 - 0.2 * mv, 0.4 + 0.2 * mv);
-    glVertex2d(0.6 * mv, 0.4 * mv);
-    glVertex2d(0.6 - 0.2 * mv, 0.4 - 0.2 * mv);
+    glVertex2d(0, 0.8 - 0.2 * mv);
+    glVertex2d(-0.6 + 0.4 * mv, 0.4 - 0.2 * mv);
+    glVertex2d(-0.4 - 0.2 * mv, 0.4 * mv);
+    glVertex2d(-0.4 + 0.2 * mv, -0.8 + 0.6 * mv);
+    glVertex2d(0.4 * mv, -0.8 + 0.2 * mv);
+    glVertex2d(0.4 - 0.2 * mv, 0.4 - 0.6 * mv);
+    glVertex2d(0.6, 0.4 * mv);
+    glVertex2d(0.6 - 0.4 * mv, 0.4 - 0.2 * mv);
+    glVertex2d(0, 0.8 - 0.2 * mv);
   glEnd();
 
   deltaTime();
@@ -110,7 +107,7 @@ void mouse(int button, int state, int x, int y) {
       exit(0);
       break;
   }
-  
+
   switch(state) {
     case GLUT_DOWN:
       if(isLeft){
