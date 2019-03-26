@@ -11,6 +11,8 @@
 
 double x = 0;
 double y = 0;
+double dt = 0.001;
+double mv = 0;
 GLdouble PI = 4.0*atan(1.0);
 GLdouble theta = 10.0*PI/360.0;
 
@@ -22,6 +24,14 @@ void idle(void) {
   glutPostRedisplay();
 }
 
+void deltaTime(){
+  if(mv < 0 || mv > 1) {
+    dt = -dt;
+  }
+  mv += dt;
+  glutPostRedisplay();
+}
+
 void resize(int w, int h) {
   glViewport(0, 0, LEN, LEN);
   glMatrixMode(GL_PROJECTION);
@@ -29,30 +39,6 @@ void resize(int w, int h) {
   gluPerspective(30.0, (double)LEN / (double)LEN, 1.0, 100.0);
   glMatrixMode(GL_MODELVIEW);
 }
-
-GLdouble shuriken[][2] = {
-  {0, 0.6},
-  {-0.2, 0.2},
-  {-0.6, 0},
-  {-0.2, -0.2},
-  {0, -0.6},
-  {0.2, -0.2},
-  {0.6, 0},
-  {0.2, 0.2},
-  {0, 0.6}
-};
-
-GLdouble arrow[][2] = {
-  {0, 0.8},
-  {-0.6, 0.4},
-  {-0.4, 0.4},
-  {-0.4, -0.8},
-  {0.4, -0.8},
-  {0.4, 0.4},
-  {0.6, 0.4},
-  {0.6, 0.4},
-  {0, 0.8},
-};
 
 GLdouble shape[9][2];
 
@@ -64,19 +50,26 @@ void display(void) {
   
   glRotated(x, 0.0, 1.0, 0.0);
   x++;
-  glBegin(GL_LINE_LOOP);
+  glBegin(GL_LINE_LOOP); // shuriken 
     glColor3d(0.0, 1.0, 0.0);
-    for (int i = 0; i < 8; i++) {
-      glVertex2dv(shuriken[i]);
-      glVertex2dv(shuriken[i + 1]);
-    }
+
+    glVertex2d(0, 0.8 - 0.6 * mv);
+    glVertex2d(-0.2 + 0.6 * mv, 0.4 - 0.2 * mv);
+    glVertex2d(0.4 + 0.6 * mv, 0.4 * mv);
+    glVertex2d(-0.2 + 0.4 * mv, -0.2 + 0.8 * mv);
+    glVertex2d(0.4 * mv, -0.6 + 0.8 * mv);
+    glVertex2d(0.4 - 0.2 * mv, 0.4 + 0.2 * mv);
+    glVertex2d(0.6 * mv, 0.4 * mv);
+    glVertex2d(0.6 - 0.2 * mv, 0.4 - 0.2 * mv);
   glEnd();
+
+  deltaTime();
   glFlush();
   glutSwapBuffers();
 }
 
 void spinDisplay() {
-	glRotatef( theta , 0 ,0 , 1 );
+	glRotatef(theta, 0 ,0 , 1 );
 	glutPostRedisplay();
 }
 
