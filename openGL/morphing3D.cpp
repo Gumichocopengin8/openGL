@@ -9,15 +9,15 @@
 #include "Angel.h"
 #define LEN 512
 
-double x = 0;
-double dt = 0.0001;
+double morphing = 0;
+double dt = 0.001;
 double mv = 0;
-GLdouble PI = 4.0 * atan(1.0);
 static GLint axis = 2;
 static GLfloat theta[] = {0.0,0.0,0.0};
+bool isOn = false;
 
 void init(void) {
-  glClearColor(0.0, 0.0, 1.0, 1.0);
+  glClearColor(0.0, 0.0, 0.0, 1.0);
 }
 
 void idle(void) {
@@ -25,9 +25,11 @@ void idle(void) {
 }
 
 void deltaTime(){
-  if(mv < 0 || mv > 1) dt = -dt;
-  mv += dt;
-  glutPostRedisplay();
+  if(isOn) {
+    if(mv < 0 || mv > 1) dt = -dt;
+    mv += dt;
+    glutPostRedisplay();
+  }
 }
 
 void resize(int w, int h) {
@@ -40,81 +42,81 @@ void resize(int w, int h) {
 
 void arrow() {
   glBegin(GL_POLYGON);
-    glColor3d(1.0, 1.0, 0.0);
-    glVertex3d(0, 1, 0);
-    glVertex3d(-1, 0.5, 0);
-    glVertex3d(-0.5, 0.5, 0);
-    glVertex3d(-0.5, 0, 0);
-    glVertex3d(0.5, 0, 0);
-    glVertex3d(0.5, 0.5, 0);
-    glVertex3d(1, 0.5, 0);
+    glColor4d(1.0, 1.0, 0.0, 1.0);
+    glVertex3d(0, 0.6 + 0.4 * mv, 0);
+    glVertex3d(-1.3 + 0.3 * mv, 1 - 0.5 * mv, 0);
+    glVertex3d(-0.5, 0.5 * mv, 0);
+    glVertex3d(-0.5, 0.5 - 0.5 * mv, 0);
+    glVertex3d(0.5, 0.5 - 0.5 * mv, 0);
+    glVertex3d(0.5, 0.5 * mv, 0);
+    glVertex3d(1.3 - 0.3 * mv, 1 - 0.5 * mv, 0);
   glEnd();
 
   glBegin(GL_POLYGON);
-    glColor3d(0.5, 0.0, 0.0);
-    glVertex3d(0, 1, 1);
-    glVertex3d(-1, 0.5, 1);
-    glVertex3d(-0.5, 0.5, 1);
-    glVertex3d(-0.5, 0, 1);
-    glVertex3d(0.5, 0, 1);
-    glVertex3d(0.5, 0.5, 1);
-    glVertex3d(1, 0.5, 1);
+    glColor4d(0.5, 0.0, 0.0, 1.0);
+    glVertex3d(0, 0.6 + 0.4 * mv, 0);
+    glVertex3d(-1.3 + 0.3 * mv, 1 - 0.5 * mv, 1);
+    glVertex3d(-0.5, 0.5 * mv, 1);
+    glVertex3d(-0.5, 0.5 - 0.5 * mv, 1);
+    glVertex3d(0.5, 0.5 - 0.5 * mv, 1);
+    glVertex3d(0.5, 0.5 * mv, 1);
+    glVertex3d(1.3 - 0.3 * mv, 1 - 0.5 * mv, 1);
   glEnd();
 
   glBegin(GL_QUADS);
-    glColor3d(0, 1.0, 1.0);
-    glVertex3d(0, 1, 0);
-    glVertex3d(0, 1, 1);
-    glVertex3d(-1, 0.5, 1);
-    glVertex3d(-1, 0.5, 0);
+    glColor4d(0, 1.0, 1.0, 1.0);
+    glVertex3d(0, 0.6 + 0.4 * mv, 0);
+    glVertex3d(-1.3 + 0.3 * mv, 1 - 0.5 * mv, 0);
+    glVertex3d(-1.3 + 0.3 * mv, 1 - 0.5 * mv, 1);
+    glVertex3d(0, 0.6 + 0.4 * mv, 1);
   glEnd();
 
   glBegin(GL_QUADS);
-    glColor3d(0, 0, 1.0);
-    glVertex3d(-1, 0.5, 0);
-    glVertex3d(-0.5, 0.5, 0);
-    glVertex3d(-0.5, 0.5, 1);
-    glVertex3d(-1, 0.5, 1);
+    glColor4d(1.0, 0, 1.0, 1.0);
+    glVertex3d(-1.3 + 0.3 * mv, 1 - 0.5 * mv, 0);
+    glVertex3d(-0.5, 0.5 * mv, 0);
+    glVertex3d(-0.5, 0.5 * mv, 1);
+    glVertex3d(-1.3 + 0.3 * mv, 1 - 0.5 * mv, 1);
   glEnd();
 
   glBegin(GL_QUADS);
-    glColor3d(1, 0, 0);
-    glVertex3d(-0.5, 0.5, 0);
-    glVertex3d(-0.5, 0, 0);
-    glVertex3d(-0.5, 0, 1);
-    glVertex3d(-0.5, 0.5, 1);
+    glColor4d(1, 0, 0, 1.0);
+    glVertex3d(-0.5, 0.5 * mv, 0);
+    glVertex3d(-0.5, 0.5 - 0.5 * mv, 0);
+    glVertex3d(-0.5, 0.5 - 0.5 * mv, 1);
+    glVertex3d(-0.5, 0.5 * mv, 1);
   glEnd();
 
   glBegin(GL_QUADS);
-    glColor3d(1, 0, 1);
-    glVertex3d(-0.5, 0, 0);
-    glVertex3d(0.5, 0, 0);
-    glVertex3d(0.5, 0, 1);
-    glVertex3d(-0.5, 0, 1);
+    glColor4d(1, 0, 1, 1.0);
+    glVertex3d(-0.5, 0.5 - 0.5 * mv, 0);
+    glVertex3d(0.5, 0.5 - 0.5 * mv, 0);
+    glVertex3d(0.5, 0.5 - 0.5 * mv, 1);
+    glVertex3d(-0.5, 0.5 - 0.5 * mv, 1);
   glEnd();
 
   glBegin(GL_QUADS);
-    glColor3d(1, 0, 1);
-    glVertex3d(0.5, 0, 0);
-    glVertex3d(0.5, 0.5, 0);
-    glVertex3d(0.5, 0.5, 1);
-    glVertex3d(0.5, 0, 1);
+    glColor4d(1, 0, 0.5, 1.0);
+    glVertex3d(0.5, 0.5 - 0.5 * mv, 0);
+    glVertex3d(0.5, 0.5 * mv, 0);
+    glVertex3d(0.5, 0.5 * mv, 1);
+    glVertex3d(0.5, 0.5 - 0.5 * mv, 1);
   glEnd();
 
   glBegin(GL_QUADS);
-    glColor3d(1, 0, 1);
-    glVertex3d(0.5, 0.5, 0);
-    glVertex3d(1, 0.5, 0);
-    glVertex3d(1, 0.5, 1);
-    glVertex3d(0.5, 0.5, 1);
+    glColor4d(0.3, 0, 1, 1.0);
+    glVertex3d(0.5, 0.5 * mv, 0);
+    glVertex3d(1.3 - 0.3 * mv, 1 - 0.5 * mv, 0);
+    glVertex3d(1.3 - 0.3 * mv, 1 - 0.5 * mv, 1);
+    glVertex3d(0.5, 0.5 * mv, 1);
   glEnd();
 
   glBegin(GL_QUADS);
-    glColor3d(1, 1, 1);
-    glVertex3d(1, 0.5, 0);
-    glVertex3d(0, 1, 0);
-    glVertex3d(0, 1, 1);
-    glVertex3d(1, 0.5, 1);
+    glColor4d(1, 1, 1, 1.0);
+    glVertex3d(1.3 - 0.3 * mv, 1 - 0.5 * mv, 0);
+    glVertex3d(0, 0.6 + 0.4 * mv, 0);
+    glVertex3d(0, 0.6 + 0.4 * mv, 1);
+    glVertex3d(1.3 - 0.3 * mv, 1 - 0.5 * mv, 1);
   glEnd();
 
   glFlush();
@@ -176,13 +178,17 @@ void mouse(int button, int state, int x, int y) {
 }
 
 void keyboard (unsigned char key, int x , int y) {
-	if (key=='x' || key=='X') {axis = 0;glutPostRedisplay();}
-	if (key=='y' || key=='Y') {axis = 1;glutPostRedisplay();}
-	if (key=='z' || key=='Z') {axis = 2;glutPostRedisplay();}
+	if (key=='x' || key=='X') {axis = 0; glutPostRedisplay();}
+	if (key=='y' || key=='Y') {axis = 1; glutPostRedisplay();}
+	if (key=='z' || key=='Z') {axis = 2; glutPostRedisplay();}
+  if (key=='s' || key=='S') {isOn = true;}
+  if (key=='g' || key=='G') {isOn = false;}
 	if (key=='q' || key=='Q') exit(0);
 
-	theta[axis] += 2.0;
-	if( theta[axis] > 360.0 ) theta[axis] -= 360.0;
+  if((key!='s'&&key!='S'&&key!='g'&&key!='G')&&(key=='x'||key=='X'||key=='y'||key=='Y'||key=='z'||key=='Z')) {
+    theta[axis] += 2.0;
+    if( theta[axis] > 360.0 ) theta[axis] -= 360.0;
+  }
 }
 
 void timer(int extra) {
